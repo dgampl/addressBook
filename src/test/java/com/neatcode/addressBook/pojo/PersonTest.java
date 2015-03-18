@@ -37,5 +37,4 @@ public class PersonTest {
 		person.setDob(date);
 		assertEquals(date, person.getDob());
 	}
-
 }

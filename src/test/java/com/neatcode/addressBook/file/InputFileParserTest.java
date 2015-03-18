@@ -127,7 +127,5 @@ public class InputFileParserTest {
 		Date dob2 = person2.getDob();
 		assertNotNull(dob2);
 		assertEquals(690595200000L, dob2.getTime());
-		
 	}
-
 }
