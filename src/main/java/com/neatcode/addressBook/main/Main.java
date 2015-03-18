@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.neatcode.addressBook.exception.InvalidInputFileException;
+import com.neatcode.addressBook.exception.NameDoesntExistException;
 import com.neatcode.addressBook.file.InputFileParser;
 import com.neatcode.addressBook.pojo.Person;
 import com.neatcode.addressBook.query.Query;
@@ -23,12 +24,28 @@ public class Main {
 		}
 		
 		Query query = new Query();
-		int malesCount = query.countMales(fileContent);
+		int malesCount = query.getMalesCount(fileContent);
 		System.out.println("Amount of males in the AddressBook is: " + malesCount);
 		
 		String oldestPerson = query.getOldestPerson(fileContent);
 		System.out.println("The oldest person in the AddressBook is: " + oldestPerson);
-
+		
+		String name1 = "Bill McKnight";
+		String name2 = "Paul Robinson";
+		long dobDiffInDays = 0L;
+		try {
+			dobDiffInDays = query.getDobDiffInDaysFor(name1, name2, fileContent);
+		} catch (NameDoesntExistException e) {
+			System.out.println("Unable to determine who is older. At least one of the names doesn't exist in the file provided: " + name1 + ", " + name2);
+			System.exit(-4);
+		}
+		if (dobDiffInDays == 0L) {
+			System.out.println(name1 + " and " + name2 + " are equally old.");
+		} else if (dobDiffInDays < 0) {
+			System.out.println(name1 + " is " + Math.abs(dobDiffInDays) + " days older than " + name2 + ".");
+		} else {
+			System.out.println(name1 + " is " + dobDiffInDays + " days younger than " + name2 + ".");
+		}
 	}
 
 	private static void checkParams(String[] args) {

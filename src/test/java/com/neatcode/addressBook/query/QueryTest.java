@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.neatcode.addressBook.exception.NameDoesntExistException;
 import com.neatcode.addressBook.pojo.Person;
 
 public class QueryTest {
@@ -33,7 +35,7 @@ public class QueryTest {
 		person3.setGender('M');
 		fileContent.add(person3);
 		
-		int malesCount = query.countMales(fileContent);
+		int malesCount = query.getMalesCount(fileContent);
 		
 		assertEquals(2, malesCount);
 	}
@@ -64,5 +66,83 @@ public class QueryTest {
 		
 		assertEquals("Peter", oldestPerson);
 	}
-
+	
+	@Test
+	public void throwsExceptionIfFirstNameDoesntExist() {
+		boolean thrown = false;
+		ArrayList<Person> fileContent = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		Person person1 = new Person();
+		person1.setName("Daniel");
+		Date dob1 = calendar.getTime();
+		person1.setDob(dob1);
+		fileContent.add(person1);
+		
+		calendar.add(Calendar.YEAR, 1);
+		Person person2 = new Person();
+		person2.setName("Alex");
+		Date dob2 = calendar.getTime();
+		person2.setDob(dob2);
+		fileContent.add(person2);
+		try {
+			query.getDobDiffInDaysFor("Paul", "Daniel", fileContent);
+		} catch (NameDoesntExistException e) {
+			thrown = true;
+		}
+		if (!thrown) {
+			Assert.fail("Exception expected, but wasn't thrown.");
+		}
+	}
+	
+	@Test
+	public void throwsExceptionIfSecondNameDoesntExist() {
+		boolean thrown = false;
+		ArrayList<Person> fileContent = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		Person person1 = new Person();
+		person1.setName("Daniel");
+		Date dob1 = calendar.getTime();
+		person1.setDob(dob1);
+		fileContent.add(person1);
+		
+		calendar.add(Calendar.YEAR, 1);
+		Person person2 = new Person();
+		person2.setName("Alex");
+		Date dob2 = calendar.getTime();
+		person2.setDob(dob2);
+		fileContent.add(person2);
+		try {
+			query.getDobDiffInDaysFor("Daniel", "Paul", fileContent);
+		} catch (NameDoesntExistException e) {
+			thrown = true;
+		}
+		if (!thrown) {
+			Assert.fail("Exception expected, but wasn't thrown.");
+		}
+	}
+	
+	@Test
+	public void returnsCorrectDOBDiff() {
+		ArrayList<Person> fileContent = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		Person person1 = new Person();
+		person1.setName("Daniel");
+		person1.setDob(calendar.getTime());
+		fileContent.add(person1);
+		
+		Person person2 = new Person();
+		person2.setName("Paul");
+		calendar.add(Calendar.DAY_OF_YEAR, 3);
+		person2.setDob(calendar.getTime());
+		fileContent.add(person2);
+		
+		long dobDiffInDays = 0L;
+		try {
+			dobDiffInDays = query.getDobDiffInDaysFor("Daniel", "Paul", fileContent);
+		} catch (NameDoesntExistException e) {
+			Assert.fail("Exception thrown, but not expected!");
+		}
+		
+		assertEquals(-3, dobDiffInDays);
+	}
 }
