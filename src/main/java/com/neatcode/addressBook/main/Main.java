@@ -24,8 +24,10 @@ public class Main {
 		
 		Query query = new Query();
 		int malesCount = query.countMales(fileContent);
-		System.out.println("Amount of males in the AddressBook: " + malesCount);
+		System.out.println("Amount of males in the AddressBook is: " + malesCount);
 		
+		String oldestPerson = query.getOldestPerson(fileContent);
+		System.out.println("The oldest person in the AddressBook is: " + oldestPerson);
 
 	}
 

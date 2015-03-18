@@ -16,4 +16,23 @@ public class Query {
 		return malesCount;
 	}
 
+	public String getOldestPerson(ArrayList<Person> fileContent) {
+		String oldestPerson = null;
+		long oldestDob = 0L;
+		for (Person person : fileContent) {
+			String name = person.getName();
+			long dob = person.getDob().getTime();
+			if (oldestDob == 0L) {
+				oldestDob = dob;
+				oldestPerson = name;
+			} else {
+				if (dob < oldestDob) {
+					oldestPerson = name;
+					oldestDob = dob; 
+				}
+			}
+		}
+		return oldestPerson;
+	}
+
 }
