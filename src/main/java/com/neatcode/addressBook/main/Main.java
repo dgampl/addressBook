@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.neatcode.addressBook.exception.InvalidInputFileException;
 import com.neatcode.addressBook.file.InputFileParser;
 import com.neatcode.addressBook.pojo.Person;
+import com.neatcode.addressBook.query.Query;
 
 public class Main {
 
@@ -20,7 +21,11 @@ public class Main {
 			System.out.println("Invalid input file. Exiting...");
 			System.exit(-1);
 		}
-		System.out.println(fileContent.size());
+		
+		Query query = new Query();
+		int malesCount = query.countMales(fileContent);
+		System.out.println("Amount of males in the AddressBook: " + malesCount);
+		
 
 	}
 
